@@ -15,7 +15,8 @@ module.exports = {
                    next();  
         } else {
             req.flash("error", "You need to be signed in to do that!");
-            res.redirect("login");
+            //edited from original 
+			res.redirect("/login");
         }
     }
 };

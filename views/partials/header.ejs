@@ -11,4 +11,23 @@
         <a href="/" class="item">Home</a>
         <a href="/blogs/new" class="item">New Post</a>
     </div>
+	<div class="right menu">
+	
+                    <% if(!currentUser){ %>
+                        <a href="/login" class="item">Login</a>
+                        <a href="/register" class="item">Sign Up</a>
+                    <% } else { %>
+                        <a href="#" class="item">Signed In As <%= currentUser.username %></a>
+                        <a href="/logout" class="item">Logout</a>
+                    <% } %>
+	</div>
 </div>
+	<div class="ui container">
+       <% if(error && error.length > 0) { %>
+         <div class="ui negative message"><p><%=error %></p></div>
+       <% } %>
+       
+       <% if(success && success.length > 0) { %>
+         <div class="ui positive message"><p><%= success %></p></div>
+       <% } %>
+    </div>

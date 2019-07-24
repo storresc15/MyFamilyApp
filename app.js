@@ -4,12 +4,14 @@ bodyParser = require("body-parser"),
 methodOverride = require("method-override"),
 expressSanitizer = require("express-sanitizer"),
 mongoose = require("mongoose"),
+cookieParser = require("cookie-parser"),
 passport = require("passport"),
 flash = require("connect-flash"),
 LocalStrategy = require("passport-local"),
 passportLocalMongoose = require("passport-local-mongoose"),
 Blog  = require("./models/blog"),
-middleware = require("../middleware");	
+middleware = require("./middleware"),
+session = require("express-session"),	
 User = require("./models/user");
 const PORT = process.env.PORT || 3000;
 
@@ -28,6 +30,7 @@ app.use(express.static("public"));
 app.use(bodyParser.urlencoded({extended: true}));
 app.use(expressSanitizer());
 app.use(methodOverride("_method"));
+app.use(cookieParser('secret'));
 
 //Passport Configuration
 app.use(require("express-session")({
@@ -35,6 +38,7 @@ app.use(require("express-session")({
     resave: false,
     saveUninitialized: false
 }));
+
 app.use(flash());
 app.use(passport.initialize());
 app.use(passport.session());
@@ -65,7 +69,54 @@ app.get("/blogs", function(req, res){
     });
 });
 
-//NEW ROUTE
+//INDEX ROUTES: To be tested, then refactores to be placed on a different folder./////////////
+
+
+//show login form
+app.get("/login", function(req, res){
+   res.render("login"); 
+});
+
+//handling login logic
+app.post("/login", passport.authenticate("local", 
+    {
+        successRedirect: "/blogs",
+        failureRedirect: "/login"
+    }), function(req, res){
+});
+
+// logout route
+app.get("/logout", function(req, res){
+   req.logout();
+   req.flash("success", "LOGGED YOU OUT!");
+   res.redirect("/login");
+});
+
+///////REGISTER ROUTES//////////////////////////////
+// show register form
+app.get("/register", function(req, res){
+   res.render("register"); 
+});
+
+//handle sign up logic
+app.post("/register", function(req, res){
+    var newUser = new User({username: req.body.username});
+    User.register(newUser, req.body.password, function(err, user){
+        if(err){
+            console.log(err);
+            req.flash("error", err.message);
+            return res.render("register");
+        }
+        passport.authenticate("local")(req, res, function(){
+           req.flash("success", "Successfully Signed Up! Nice to meet you " + req.body.username);
+           res.redirect("/blogs"); 
+        });
+    });
+});
+
+
+
+//MAIN BLOG ROUTES////////////////////////////////////
 //Test this new route
 app.get("/blogs/new",middleware.isLoggedIn, function(req, res){
     res.render("new");
@@ -95,7 +146,7 @@ app.get("/blogs/:id", function(req, res){
 });
 
 //EDIT ROUTE
-app.get("/blogs/:id/edit", function(req, res) {
+app.get("/blogs/:id/edit",middleware.isLoggedIn, function(req, res) {
     Blog.findById(req.params.id, function(err, foundBlog){
         if(err) {
             res.redirect("/blogs");
@@ -106,7 +157,7 @@ app.get("/blogs/:id/edit", function(req, res) {
 });
 
 //UPDATE ROUTE
-app.put("/blogs/:id", function(req, res) {
+app.put("/blogs/:id",middleware.isLoggedIn, function(req, res) {
     req.body.blog.body = req.sanitize(req.body.blog.body);
     Blog.findByIdAndUpdate(req.params.id, req.body.blog, function(err, updatedBlog){
         if(err){
@@ -118,7 +169,7 @@ app.put("/blogs/:id", function(req, res) {
 });
 
 //DELETE ROUTE
-app.delete("/blogs/:id", function(req, res){
+app.delete("/blogs/:id",middleware.isLoggedIn, function(req, res){
     Blog.findByIdAndRemove(req.params.id, function(err){
         if(err) {
             res.redirect("/blogs");

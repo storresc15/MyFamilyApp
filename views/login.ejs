@@ -1,0 +1,31 @@
+<% include ./partials/header %>
+<div class="ui middle aligned center aligned grid">
+    <div class="column">
+        <h1 style="ui teal image header">Login</h1>
+        <div style="width: 30%; margin: 25px auto;">
+            <form action="/login" method="post" class="ui large form">
+                <div class="ui stacked segment">
+					<div class="field">
+						<div class="ui left icon input">
+						<i class="user icon"></i>	
+						<input type="text" name="username" placeholder="Username">	
+						</div>
+							
+					</div>
+					<div class="field">
+						<div class="ui left icon input">
+						<i class="lock icon"></i>	
+						<input type="password" name="password" placeholder="Password">	
+						</div>
+							
+					</div>
+                    <button class="ui fluid large blue submit button">Login</button>   
+                </div>
+            </form>
+			<div class="ui message">
+				<a href="/blogs">Go Back</a>
+			</div>
+        </div>
+    </div>
+</div>
+<% include ./partials/footer %>
