@@ -1,0 +1,13 @@
+#background {
+    /*background: url(https://images.unsplash.com/photo-1414016642750-7fdd78dc33d9?dpr=2&fit=crop&fm=jpg&h=825&ixlib=rb-0.3.5&q=50&w=1450);*/
+    /*background: url(https://images.pexels.com/photos/163499/landscape-fog-olympic-mountains-mist-163499.jpeg?cs=srgb&dl=cloudy-cold-fog-163499.jpg&fm=jpg);*/
+    /*background: url(https://iso.500px.com/wp-content/uploads/2015/06/fog_cover1.jpeg);*/
+    background: url(https://iso.500px.com/wp-content/uploads/2015/06/fog_cover1.jpeg);
+    background-size: cover;
+	background-repeat:no-repeat;
+    background-position: center; 
+    transition: background 1.5s linear;
+    -webkit-backface-visibility: hidden;
+	webkit-transition: background-image 1.5s linear;
+    -webkit-transform:translate3d(0,0,0);
+}
