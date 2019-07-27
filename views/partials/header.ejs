@@ -17,7 +17,7 @@
 	
                     <% if(!currentUser){ %>
                         <a href="/login" class="item">Login</a>
-                        <a href="/register" class="item">Sign Up</a>
+                        
                     <% } else { %>
                         <a href="#" class="item">Signed In As <%= currentUser.username %></a>
                         <a href="/logout" class="item">Logout</a>
