@@ -17,7 +17,9 @@ const PORT = process.env.PORT || 3000;
 
 //APP CONFIG 
 mongoose.connect('mongodb+srv://devsprout:devSebasTestSproutMongo@cluster0-v6jvy.mongodb.net/test?retryWrites=true&w=majority', {
-	userNewUrlParser: true,
+	useNewUrlParser: true,
+	//The below url parser was deprecated
+	//userNewUrlParser: true,
 	useCreateIndex: true
 }).then(() => {
 	console.log('Connected to DB');
